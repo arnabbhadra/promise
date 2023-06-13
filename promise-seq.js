@@ -1,27 +1,40 @@
-const f1 = new Promise((resolve,reject)=>{
-    setTimeout(()=>{
+const f1 = ()=> {return new Promise((resolve, reject) => {
+    setTimeout(() => {
+        console.log(1);
         resolve(1)
-    },5000)
-})
+    }, 5000)
+})}
 
-const f2 = new Promise((resolve,reject)=>{
-    setTimeout(()=>{
+const f2 = ()=>{ return new Promise((resolve, reject) => {
+    setTimeout(() => {
+        console.log(2);
         resolve(2)
-    },3000)
-})
+    }, 2000)
+})}
 
-const f3 = new Promise((resolve,reject)=>{
-    setTimeout(()=>{
+const f3 = ()=>{ return new Promise((resolve, reject) => {
+    setTimeout(() => {
+        console.log(3);
         resolve(3)
-    },1000)
-})
+    }, 2000)
+})}
 
-let listF = [f1,f2,f3]
+let listF = [f1, f2, f3]
 
-listF.reduce((previous, current)=>{
-    return previous.then((data)=>{
-        console.log(data)
-        return current
+const f4 = ()=>{
+    return new Promise((resolve, reject)=>{
+        setTimeout(()=>{
+            console.log(4);
+            resolve();
+        }, 1000);
     })
-}, Promise.resolve(0))
+};
+listF.push(f4);
 
+const promiseSeq = () => {
+    return listF.reduce((previous, current) => {
+        return previous.then(()=> {
+            return current()});
+    }, Promise.resolve())
+}
+promiseSeq();
